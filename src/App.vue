@@ -9,6 +9,11 @@ const appName ="Task Manager";
 
 const store = useTaskStore()
 
+store.$subscribe((mutation, state) => {
+  // persist the whole state to the local storage whenever it changes
+  localStorage.setItem('tasks', JSON.stringify(state.tasks))
+})
+
 </script>
 
 <template>

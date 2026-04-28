@@ -6,53 +6,7 @@ import { reactive, ref, computed } from "vue";
 // and `Store` (e.g. `useUserStore`, `useCartStore`, `useProductStore`)
 // the first argument is a unique id of the store across your application
 export const useTaskStore = defineStore("tasks", () => {
-  const tasks = reactive([
-    {
-      id: 1,
-      name: "Website design",
-      description:
-        "Define the style guide, branding and create the webdesign on Figma.",
-      completed: true,
-    },
-    {
-      id: 2,
-      name: "Website development",
-      description: "Develop the portfolio website using Vue JS.",
-      completed: false,
-    },
-    {
-      id: 3,
-      name: "Hosting and infrastructure",
-      description:
-        "Define hosting, domain and infrastructure for the portfolio website.",
-      completed: false,
-    },
-    {
-      id: 4,
-      name: "Composition API",
-      description:
-        "Learn how to use the composition API and how it compares to the options API.",
-      completed: true,
-    },
-    {
-      id: 5,
-      name: "Pinia",
-      description: "Learn how to setup a store using Pinia.",
-      completed: true,
-    },
-    {
-      id: 6,
-      name: "Groceries",
-      description: "Buy rice, apples and potatos.",
-      completed: false,
-    },
-    {
-      id: 7,
-      name: "Bank account",
-      description: "Open a bank account for my freelance business.",
-      completed: false,
-    },
-  ]);
+  const tasks = reactive(JSON.parse(localStorage.getItem('tasks')) || []);
 let modalIsActive = ref(false);
   let filterBy = ref("");
   function setFilter(val) {
@@ -71,10 +25,10 @@ let modalIsActive = ref(false);
 function addTask(newTask)
 {
   if (newTask.name && newTask.description) {
-    newTask.id = Math.max(...tasks.map(task => task.id)) + 1;
+    newTask.id = tasks.length ?  Math.max(...tasks.map(task => task.id)) + 1 : 1;
       tasks.push(newTask);
       closeModal();
-      
+
     newTask = {
       name: '',
       description:'',
