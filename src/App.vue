@@ -1,95 +1,13 @@
 <script setup>
-import { ref,reactive } from 'vue';
 import Task from './components/Task.vue';
 import Filter from './components/Filter.vue';
+import ModalWindow from './components/modal/ModalWindow.vue';
+import AddTaskModal from './components/modal/AddTaskModal.vue';
+import { useTaskStore } from './stores/taskStore';
 //ref for premitives numbrs, strings, booleans etc
 const appName ="Task Manager";
 
-//reactive for arrays and objects
-const tasks = reactive(
-  [
-    {
-      id:1,
-      name: "Website design",
-      description: "Define the style guide, branding and create the webdesign on Figma.",
-      completed: true
-    },
-    {
-      id:2,
-      name: "Website development",
-      description: "Develop the portfolio website using Vue JS.",
-      completed: false
-    },
-    {
-      id:3,
-      name: "Hosting and infrastructure",
-      description: "Define hosting, domain and infrastructure for the portfolio website.",
-      completed: false
-    },
-    {
-      id:4,
-      name: "Composition API",
-      description: "Learn how to use the composition API and how it compares to the options API.",
-      completed: true
-    },
-    {
-      id:5,
-      name: "Pinia",
-      description: "Learn how to setup a store using Pinia.",
-      completed: true
-    },
-    {
-      id:6,
-      name: "Groceries",
-      description: "Buy rice, apples and potatos.",
-      completed: false
-    },
-    {
-      id:7,
-      name: "Bank account",
-      description: "Open a bank account for my freelance business.",
-      completed: false
-    }
-]
-);
-
-let newTask = {
-  completed: false
-};
-
-let filterBy = ref("");
-
-function addTask()
-{
-  if (newTask.name && newTask.description) {
-    newTask.id = Math.max(...tasks.map(task => task.id)) + 1;
-    tasks.push(newTask);
-    newTask = {
-      name: '',
-      description:'',
-      completed: false
-    }
-  }
-  else {
-      alert('Please enter the title and description for the task.');
-  }
-
-
- 
-}
-
- function toggleCompleted(id)
-  {
-   tasks.forEach((task) => {
-     if (id === task.id) {
-       task.completed = !task.completed;
-      }
-    })
-}
-
-function setFilter(val) {
-  filterBy.value = val;
-}
+const store = useTaskStore()
 
 </script>
 
@@ -102,23 +20,22 @@ function setFilter(val) {
           {{ appName }}
         </h1>
       </div>
+      <div class="header-side">
+        <button class="btn secondary" @click="store.openModal">Add Task +</button>
+      </div>
 
     </div>
     
-    <Filter :filterBy="filterBy" @setFilter="setFilter"/>
+    <Filter />
 
     <div class="tasks">
-      <Task @toggleCompleted="toggleCompleted"  v-for="(task, index) in tasks" :task="task" :key="index" />
+      <Task  v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
     </div>
 
-    <div class="add-task">
-      <h3>Add a new task</h3>
-      <input v-model="newTask.name" type="text" name="title" placeholder="Enter a title..."><br />
-      <textarea v-model="newTask.description" name="description" rows="4" placeholder="Enter a description..." /><br />
-      <button @click="addTask" class="btn gray">Add Task</button>
-
-    </div>
-
+    
+    <ModalWindow @closeModal="store.closeModal" v-if="store.modalIsActive">
+      <AddTaskModal/>
+    </ModalWindow>
   </main>
   
    

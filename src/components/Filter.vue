@@ -1,19 +1,21 @@
 <script setup>
 import { defineProps } from 'vue';
-const props = defineProps(['filterBy']);
+import { useTaskStore } from '../stores/taskStore';
+const store = useTaskStore();
+
 </script>
 <template>
      <div class="filters">
       <div>
         <p>Filter by state</p>
         <div class="badges">
-          <div @click="$emit('setFilter', 'todo')" class="badge" :class="{ selected: filterBy === 'todo' }">
+          <div @click="store.setFilter('todo')" class="badge" :class="{ selected: store.filterBy === 'todo' }">
             To-Do
           </div>
-          <div @click="$emit('setFilter', 'done')" class="badge" :class="{ selected: filterBy === 'done' }">
+          <div @click="store.setFilter('done')" class="badge" :class="{ selected: store.filterBy === 'done' }">
             Done
           </div>
-          <span v-if="filterBy" class="clear" @click="$emit('setFilter', '')">
+          <span v-if="store.filterBy" class="clear" @click="store.setFilter('')">
             x clear
           </span>
         </div>
