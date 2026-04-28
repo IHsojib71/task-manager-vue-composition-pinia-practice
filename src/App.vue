@@ -33,8 +33,11 @@ store.$subscribe((mutation, state) => {
     
     <Filter />
 
-    <div class="tasks">
-      <Task  v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
+    <div v-if=" store.filteredTasks.length" class="tasks">
+      <Task   v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
+    </div>
+    <div v-else class="no-task-found">
+          <h3>No Tasks Has Been Added Yet!</h3>
     </div>
 
     
@@ -86,6 +89,14 @@ store.$subscribe((mutation, state) => {
   @media (max-width: 768px) {
     grid-template-columns: repeat(1, 1fr);
   }
+}
+
+.no-task-found{
+  background: white;
+  border-radius: 15px;
+  text-align: center;
+  color:black;
+  padding: 10px;
 }
 
 
