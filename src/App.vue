@@ -37,7 +37,7 @@ store.$subscribe((mutation, state) => {
       <Task   v-for="(task, index) in store.filteredTasks" :task="task" :key="index" />
     </div>
     <div v-else class="no-task-found">
-          <h3>No Tasks Has Been Added Yet!</h3>
+          <h3>No Tasks Found!</h3>
     </div>
 
     
